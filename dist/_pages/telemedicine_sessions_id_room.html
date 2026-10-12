@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayange Clinic Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/env.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><i class="bi bi-hospital"></i></div>
+                <div class="logo-text">
+                    <h6>Kayange Clinic</h6>
+                    <small>Management System</small>
+                </div>
+            </div>
+
+            <div class="sidebar-section">Main</div>
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/dashboard"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/patients"><i class="bi bi-people"></i>Patients</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/reminders"><i class="bi bi-bell"></i>Reminders</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,locum_doctor">
+                    <a class="nav-link" href="/appointments"><i class="bi bi-calendar-check"></i>Appointments</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk">
+                    <a class="nav-link" href="/reports"><i class="bi bi-bar-chart-line"></i>Reports</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,nurse">
+                    <a class="nav-link" href="/reports/queue"><i class="bi bi-list-ol"></i>Patient Queue</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk,nurse">
+                    <a class="nav-link" href="/flow"><i class="bi bi-hospital"></i>Patient Flow</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/messages">
+                        <i class="bi bi-envelope"></i>Messages
+                        <span class="badge bg-danger ms-auto" id="msg-unread-badge" style="display:none;font-size:0.6rem">0</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Clinical</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="doctor,locum_doctor,nurse,locum_nurse,admin">
+                    <a class="nav-link" href="/consultations"><i class="bi bi-clipboard2-pulse"></i>Consultations</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/billing"><i class="bi bi-wallet2"></i>Billing</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/pharmacy"><i class="bi bi-capsule"></i>Pharmacy</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/lab"><i class="bi bi-flask"></i>Lab</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,lab_supervisor">
+                    <a class="nav-link" href="/lab/invoices"><i class="bi bi-receipt"></i>Lab Invoices</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/radiology"><i class="bi bi-camera-reels"></i>Radiology</a>
+                </li>
+                <li class="nav-item" data-roles="doctor,locum_doctor,admin">
+                    <a class="nav-link" href="/prescriptions"><i class="bi bi-prescription2"></i>Prescriptions</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/telemedicine"><i class="bi bi-camera-video"></i>Telemedicine</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/short-stay"><i class="bi bi-hospital"></i>Short Stay</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/certificates"><i class="bi bi-file-earmark-medical"></i>Certificates</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,nurse">
+                    <a class="nav-link" href="/yellow-book"><i class="bi bi-journal-medical"></i>Yellow Book</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Insurance</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/claims"><i class="bi bi-file-earmark-medical"></i>Claims</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/eligibility"><i class="bi bi-shield-check"></i>Eligibility</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/insurance/providers"><i class="bi bi-building"></i>Providers</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Administration</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/doctors"><i class="bi bi-stethoscope"></i>Doctors</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/departments"><i class="bi bi-building"></i>Departments</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/staff"><i class="bi bi-gear"></i>Staff</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/users"><i class="bi bi-people"></i>Users</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/suppliers"><i class="bi bi-truck"></i>Suppliers</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/backup"><i class="bi bi-cloud-arrow-up"></i>Backup</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Account</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/settings/profile"><i class="bi bi-person"></i>Profile</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/settings/system"><i class="bi bi-sliders"></i>System Settings</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/help"><i class="bi bi-question-circle"></i>Help</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link logout-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-left"></i>Logout</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-user" id="sidebar-user-area">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="user-avatar" id="user-avatar">SA</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebar-user-name">System Admin</div>
+                        <div class="user-role" id="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn d-lg-none p-0 border-0" onclick="toggleSidebar()" style="font-size:1.25rem">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h5 class="page-title" id="page-title">Dashboard</h5>
+                </div>
+                <div class="topbar-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search patients..." id="global-search">
+                </div>
+                <div class="topbar-actions">
+                    <div class="dropdown" id="notif-dropdown">
+                        <button class="btn-icon" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotifications()">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger text-white rounded-pill" id="notif-badge" style="position:absolute;top:-2px;right:-2px;font-size:0.6rem;min-width:16px;height:16px;display:none"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notif-panel" style="width:380px;max-height:480px;overflow-y:auto">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                <h6 class="mb-0">Notifications</h6>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0" onclick="markAllRead()">Mark all read</button>
+                            </div>
+                            <div id="notif-list" class="notif-list"></div>
+                            <div id="notif-empty" class="text-center text-muted py-4" style="display:none">
+                                <i class="bi bi-bell-slash" style="font-size:1.5rem;display:block;margin-bottom:0.25rem"></i>
+                                No notifications
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topbar-user-btn" id="topbar-user-btn">
+                        <div class="avatar" id="topbar-avatar">SA</div>
+                        <span class="user-name-small d-none d-md-inline" id="topbar-user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+<style>
+    .video-container { background: #1a1a2e; border-radius: 12px; overflow: hidden; position: relative; }
+    .video-main { width: 100%; height: 60vh; background: #16213e; display: flex; align-items: center; justify-content: center; color: #fff; }
+    .video-main video { width: 100%; height: 100%; object-fit: cover; }
+    .video-self { position: absolute; bottom: 20px; right: 20px; width: 200px; height: 150px; background: #0f3460; border-radius: 8px; border: 2px solid #fff; overflow: hidden; }
+    .video-self video { width: 100%; height: 100%; object-fit: cover; }
+    .video-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
+    .video-controls .btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .video-controls .btn-end { background: #dc3545; color: #fff; }
+    .video-controls .btn-mute { background: #6c757d; color: #fff; }
+    .video-controls .btn-mute.active { background: #dc3545; }
+    .session-timer { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.6); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; z-index: 10; }
+    .session-status { position: absolute; top: 20px; right: 20px; z-index: 10; }
+    .waiting-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; z-index: 20; }
+    .waiting-overlay .spinner-border { width: 3rem; height: 3rem; }
+</style>
+
+<div class="page-header">
+    <h4><i class="bi bi-camera-video"></i> <span id="session-label">Video Room</span></h4>
+    <div class="d-flex gap-2">
+        <a href="/telemedicine/sessions/__RID__" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back to Session</a>
+    </div>
+</div>
+
+<div class="video-container" id="video-container">
+    <div class="video-main" id="local-video">
+        <div class="text-center">
+            <i class="bi bi-camera-video" style="font-size:3rem;opacity:0.3"></i>
+            <p class="mt-2">Click "Start Call" to begin</p>
+        </div>
+    </div>
+    <div class="video-self" id="self-video" style="display:none">
+        <video id="self-stream" autoplay muted playsinline></video>
+    </div>
+    <div class="session-timer" id="session-timer" style="display:none"><i class="bi bi-clock me-1"></i><span id="timer-display">00:00</span></div>
+    <div class="session-status" id="session-status-badge"></div>
+
+    <div class="video-controls" id="video-controls" style="display:none">
+        <button class="btn btn-mute" id="btn-mute" onclick="toggleMute()" title="Toggle Microphone"><i class="bi bi-mic"></i></button>
+        <button class="btn btn-mute" id="btn-video" onclick="toggleVideo()" title="Toggle Camera"><i class="bi bi-camera-video"></i></button>
+        <button class="btn btn-mute" id="btn-share" onclick="toggleScreenShare()" title="Share Screen"><i class="bi bi-display"></i></button>
+        <button class="btn btn-end" id="btn-end" onclick="endCall()" title="End Call"><i class="bi bi-telephone-x"></i></button>
+    </div>
+
+    <div class="waiting-overlay" id="waiting-overlay">
+        <div class="spinner-border text-primary mb-3"></div>
+        <h5 id="waiting-text">Waiting for doctor to join...</h5>
+        <p class="text-muted">You will be connected automatically</p>
+    </div>
+</div>
+
+<div class="row g-3 mt-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h6>Session Notes</h6></div>
+            <div class="card-body">
+                <textarea class="form-control" id="room-notes" rows="3" placeholder="Quick notes during call..."></textarea>
+                <button class="btn btn-sm btn-primary mt-2" onclick="saveRoomNotes()"><i class="bi bi-check-lg me-1"></i>Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h6>Quick Actions</h6></div>
+            <div class="card-body">
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn btn-outline-primary btn-sm" onclick="switchTab('tab-prescriptions')"><i class="bi bi-prescription me-1"></i>E-Prescribe</button>
+                    <button class="btn btn-outline-success btn-sm" onclick="switchTab('tab-payments')"><i class="bi bi-cash me-1"></i>Collect Payment</button>
+                    <a href="/telemedicine/sessions/__RID__" class="btn btn-outline-info btn-sm"><i class="bi bi-info-circle me-1"></i>Full Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const sessionId = window.ROUTE_ID;
+const currentUserId = (getUser() || {}).id;
+const currentRole = (getUser() || {}).role || '';
+let sessionData = null;
+let localStream = null;
+let isMuted = false;
+let isVideoOff = false;
+let timerInterval = null;
+let startTime = null;
+
+document.addEventListener('DOMContentLoaded', loadSession);
+
+async function loadSession() {
+    const res = await fetchWithAuth('/telemedicine/api/sessions/' + sessionId);
+    sessionData = await res.json();
+    if (sessionData.error) { showToast(sessionData.error, 'danger'); return; }
+
+    document.getElementById('session-label').textContent = sessionData.session_id + ' - ' + sessionData.p_first + ' ' + sessionData.p_last;
+    document.getElementById('room-notes').value = sessionData.notes || '';
+
+    const isDoctor = currentUserId === sessionData.doctor_id;
+    document.getElementById('waiting-text').textContent = isDoctor ? 'Waiting for patient to join...' : 'Waiting for doctor to join...';
+
+    // Auto-join
+    await joinSession();
+}
+
+async function joinSession() {
+    const res = await fetchWithAuth('/telemedicine/api/sessions/' + sessionId + '/join', { method: 'POST' });
+    const data = await res.json();
+
+    if (data.is_doctor && sessionData.status === 'scheduled') {
+        document.getElementById('waiting-overlay').style.display = 'none';
+        document.getElementById('video-controls').style.display = '';
+    } else if (sessionData.status === 'in_progress') {
+        document.getElementById('waiting-overlay').style.display = 'none';
+        document.getElementById('video-controls').style.display = '';
+        startTimer();
+    }
+}
+
+async function startCall() {
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('self-stream').srcObject = localStream;
+        document.getElementById('self-video').style.display = '';
+        document.getElementById('video-controls').style.display = '';
+        document.getElementById('waiting-overlay').style.display = 'none';
+
+        // Update status to in_progress
+        await fetchWithAuth('/telemedicine/api/sessions/' + sessionId, {
+            method: 'PUT', body: JSON.stringify({ status: 'in_progress' })
+        });
+        startTimer();
+        showToast('Call started', 'success');
+    } catch (err) {
+        showToast('Could not access camera/microphone: ' + err.message, 'danger');
+    }
+}
+
+function startTimer() {
+    startTime = Date.now();
+    document.getElementById('session-timer').style.display = '';
+    timerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        const secs = String(elapsed % 60).padStart(2, '0');
+        document.getElementById('timer-display').textContent = mins + ':' + secs;
+    }, 1000);
+}
+
+function toggleMute() {
+    if (!localStream) return;
+    isMuted = !isMuted;
+    localStream.getAudioTracks().forEach(t => t.enabled = !isMuted);
+    document.getElementById('btn-mute').classList.toggle('active', isMuted);
+    document.getElementById('btn-mute').innerHTML = isMuted ? '<i class="bi bi-mic-mute"></i>' : '<i class="bi bi-mic"></i>';
+}
+
+function toggleVideo() {
+    if (!localStream) return;
+    isVideoOff = !isVideoOff;
+    localStream.getVideoTracks().forEach(t => t.enabled = !isVideoOff);
+    document.getElementById('btn-video').classList.toggle('active', isVideoOff);
+    document.getElementById('btn-video').innerHTML = isVideoOff ? '<i class="bi bi-camera-video-off"></i>' : '<i class="bi bi-camera-video"></i>';
+}
+
+async function toggleScreenShare() {
+    try {
+        const screen = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        const videoTrack = screen.getVideoTracks()[0];
+        videoTrack.onended = () => { showToast('Screen sharing stopped', 'info'); };
+        showToast('Screen sharing started', 'success');
+    } catch (err) { showToast('Screen share cancelled', 'info'); }
+}
+
+async function endCall() {
+    if (!confirm('End this call?')) return;
+    if (localStream) { localStream.getTracks().forEach(t => t.stop()); }
+    if (timerInterval) { clearInterval(timerInterval); }
+    await fetchWithAuth('/telemedicine/api/sessions/' + sessionId, {
+        method: 'PUT', body: JSON.stringify({ status: 'completed' })
+    });
+    showToast('Call ended', 'success');
+    setTimeout(() => { window.location.href = '/telemedicine/sessions/' + sessionId; }, 1000);
+}
+
+async function saveRoomNotes() {
+    const notes = document.getElementById('room-notes').value.trim();
+    await fetchWithAuth('/telemedicine/api/sessions/' + sessionId, {
+        method: 'PUT', body: JSON.stringify({ notes })
+    });
+    showToast('Notes saved', 'success');
+}
+
+function switchTab(tabId) {
+    const tab = document.querySelector('[data-bs-target="#' + tabId + '"]');
+    if (tab) { new bootstrap.Tab(tab).show(); }
+}
+</script>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!token) { window.location.href = '/auth/login'; return; }
+
+            const initials = (user.first_name || 'U').charAt(0) + (user.last_name || '').charAt(0);
+            document.getElementById('sidebar-user-name').textContent = user.first_name + ' ' + user.last_name;
+            document.getElementById('sidebar-user-role').textContent = user.role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('topbar-avatar').textContent = initials;
+            document.getElementById('topbar-user-name').textContent = user.first_name || 'User';
+
+            document.querySelectorAll('#sidebar-nav .nav-item').forEach(item => {
+                const roles = item.dataset.roles;
+                if (roles !== 'all' && !roles.split(',').includes(user.role)) {
+                    item.style.display = 'none';
+                }
+            });
+
+            const path = window.location.pathname;
+            document.querySelectorAll('#sidebar-nav .nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && path.startsWith(href) && href !== '/dashboard') {
+                    link.classList.add('active');
+                } else if (href === '/dashboard' && path === '/dashboard') {
+                    link.classList.add('active');
+                }
+            });
+
+            const titles = {
+                '/dashboard': 'Dashboard',
+                '/patients': 'Patients',
+                '/appointments': 'Appointments',
+                '/consultations': 'Consultations',
+                '/billing': 'Billing',
+                '/pharmacy': 'Pharmacy',
+                '/doctors': 'Doctors',
+                '/departments': 'Departments',
+                '/staff': 'Staff',
+                '/users': 'Users',
+                '/suppliers': 'Suppliers',
+                '/reports': 'Reports',
+                '/messages': 'Messages',
+            '/flow': 'Patient Flow',
+                '/lab': 'Lab',
+                '/prescriptions': 'Prescriptions',
+                '/settings/profile': 'My Profile',
+                '/settings/system': 'System Settings',
+                '/insurance/claims': 'Insurance Claims',
+                '/insurance/eligibility': 'Eligibility Verification',
+                '/insurance/providers': 'Insurance Providers',
+                '/backup': 'Backup',
+                '/yellow-book': 'Yellow Book',
+                '/reminders': 'Reminders'
+            };
+            for (const [key, val] of Object.entries(titles)) {
+                if (path.startsWith(key)) { document.getElementById('page-title').textContent = val; break; }
+            }
+        });
+
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) { var d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000); expires = '; expires=' + d.toUTCString(); }
+            document.cookie = name + '=' + (value || '') + expires + '; path=/';
+        }
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i=0; i < ca.length; i++) { var c = ca[i].trim(); if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length); }
+            return null;
+        }
+        function eraseCookie(name) { document.cookie = name + '=; Max-Age=-99999999; path=/'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+        function logout() {
+            eraseCookie('access_token');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+        }
+
+        // Sync token from localStorage to cookie for page navigation auth
+        (function() {
+            var token = localStorage.getItem('token');
+            if (token && !getCookie('access_token')) {
+                setCookie('access_token', token, 1);
+            }
+        })();
+
+        document.getElementById('global-search')?.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                window.location.href = '/patients?search=' + encodeURIComponent(this.value.trim());
+            }
+        });
+
+        // Notification system
+        async function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api?limit=15', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const notifs = await res.json();
+                const list = document.getElementById('notif-list');
+                const empty = document.getElementById('notif-empty');
+                list.innerHTML = '';
+                if (!notifs.length) {
+                    list.style.display = 'none';
+                    empty.style.display = 'block';
+                    return;
+                }
+                list.style.display = 'block';
+                empty.style.display = 'none';
+                const typeIcons = {
+                    info: 'bi-info-circle text-primary',
+                    success: 'bi-check-circle text-success',
+                    warning: 'bi-exclamation-triangle text-warning',
+                    danger: 'bi-exclamation-circle text-danger',
+                    message: 'bi-envelope text-info',
+                    lab: 'bi-flask text-primary',
+                    appointment: 'bi-calendar-check text-success',
+                    prescription: 'bi-prescription2 text-primary',
+                    insurance: 'bi-shield-check text-success'
+                };
+                notifs.forEach(n => {
+                    const icon = typeIcons[n.type] || typeIcons.info;
+                    const time = notifTime(n.created_at);
+                    list.innerHTML += '<div class="notif-item ' + (n.is_read ? '' : 'unread') + '" onclick="handleNotifClick(this, ' + n.id + ', \'' + (n.reference_url || '') + '\')">' +
+                        '<div class="d-flex gap-2">' +
+                        '<div class="notif-icon"><i class="bi ' + icon + '"></i></div>' +
+                        '<div class="flex-grow-1">' +
+                        '<div class="notif-title">' + notifEsc(n.title) + '</div>' +
+                        '<div class="notif-msg">' + notifEsc(n.message || '') + '</div>' +
+                        '<div class="notif-time">' + time + '</div>' +
+                        '</div>' +
+                        '<button class="notif-dismiss" onclick="event.stopPropagation(); dismissNotif(' + n.id + ', this)" title="Dismiss"><i class="bi bi-x"></i></button>' +
+                        '</div>' +
+                        '</div>';
+                });
+            } catch(e) {}
+        }
+
+        async function checkUnread() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api/unread-count', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                const badge = document.getElementById('notif-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+
+        async function handleNotifClick(el, id, url) {
+            if (!el.classList.contains('unread')) {
+                if (url) window.location.href = url;
+                return;
+            }
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id + '/read', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            el.classList.remove('unread');
+            checkUnread();
+            if (url) window.location.href = url;
+        }
+
+        async function dismissNotif(id, btn) {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            btn.closest('.notif-item').remove();
+            checkUnread();
+            const list = document.getElementById('notif-list');
+            if (!list.children.length) { list.style.display = 'none'; document.getElementById('notif-empty').style.display = 'block'; }
+        }
+
+        async function markAllRead() {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/read-all', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+            checkUnread();
+        }
+
+        function notifTime(ts) {
+            if (!ts) return '';
+            const diff = Date.now() - new Date(ts).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            const days = Math.floor(hrs / 24);
+            return days + 'd ago';
+        }
+
+        function notifEsc(s) {
+            if (!s) return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // Poll for unread notifications every 60 seconds
+        checkUnread();
+        setInterval(checkUnread, 60000);
+    </script>
+</body>
+</html>

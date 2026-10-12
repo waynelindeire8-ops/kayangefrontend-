@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayange Clinic Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/env.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><i class="bi bi-hospital"></i></div>
+                <div class="logo-text">
+                    <h6>Kayange Clinic</h6>
+                    <small>Management System</small>
+                </div>
+            </div>
+
+            <div class="sidebar-section">Main</div>
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/dashboard"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/patients"><i class="bi bi-people"></i>Patients</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/reminders"><i class="bi bi-bell"></i>Reminders</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,locum_doctor">
+                    <a class="nav-link" href="/appointments"><i class="bi bi-calendar-check"></i>Appointments</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk">
+                    <a class="nav-link" href="/reports"><i class="bi bi-bar-chart-line"></i>Reports</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,nurse">
+                    <a class="nav-link" href="/reports/queue"><i class="bi bi-list-ol"></i>Patient Queue</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk,nurse">
+                    <a class="nav-link" href="/flow"><i class="bi bi-hospital"></i>Patient Flow</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/messages">
+                        <i class="bi bi-envelope"></i>Messages
+                        <span class="badge bg-danger ms-auto" id="msg-unread-badge" style="display:none;font-size:0.6rem">0</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Clinical</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="doctor,locum_doctor,nurse,locum_nurse,admin">
+                    <a class="nav-link" href="/consultations"><i class="bi bi-clipboard2-pulse"></i>Consultations</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/billing"><i class="bi bi-wallet2"></i>Billing</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/pharmacy"><i class="bi bi-capsule"></i>Pharmacy</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/lab"><i class="bi bi-flask"></i>Lab</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,lab_supervisor">
+                    <a class="nav-link" href="/lab/invoices"><i class="bi bi-receipt"></i>Lab Invoices</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/radiology"><i class="bi bi-camera-reels"></i>Radiology</a>
+                </li>
+                <li class="nav-item" data-roles="doctor,locum_doctor,admin">
+                    <a class="nav-link" href="/prescriptions"><i class="bi bi-prescription2"></i>Prescriptions</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/telemedicine"><i class="bi bi-camera-video"></i>Telemedicine</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/short-stay"><i class="bi bi-hospital"></i>Short Stay</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/certificates"><i class="bi bi-file-earmark-medical"></i>Certificates</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,nurse">
+                    <a class="nav-link" href="/yellow-book"><i class="bi bi-journal-medical"></i>Yellow Book</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Insurance</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/claims"><i class="bi bi-file-earmark-medical"></i>Claims</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/eligibility"><i class="bi bi-shield-check"></i>Eligibility</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/insurance/providers"><i class="bi bi-building"></i>Providers</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Administration</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/doctors"><i class="bi bi-stethoscope"></i>Doctors</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/departments"><i class="bi bi-building"></i>Departments</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/staff"><i class="bi bi-gear"></i>Staff</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/users"><i class="bi bi-people"></i>Users</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/suppliers"><i class="bi bi-truck"></i>Suppliers</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/backup"><i class="bi bi-cloud-arrow-up"></i>Backup</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Account</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/settings/profile"><i class="bi bi-person"></i>Profile</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/settings/system"><i class="bi bi-sliders"></i>System Settings</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/help"><i class="bi bi-question-circle"></i>Help</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link logout-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-left"></i>Logout</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-user" id="sidebar-user-area">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="user-avatar" id="user-avatar">SA</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebar-user-name">System Admin</div>
+                        <div class="user-role" id="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn d-lg-none p-0 border-0" onclick="toggleSidebar()" style="font-size:1.25rem">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h5 class="page-title" id="page-title">Dashboard</h5>
+                </div>
+                <div class="topbar-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search patients..." id="global-search">
+                </div>
+                <div class="topbar-actions">
+                    <div class="dropdown" id="notif-dropdown">
+                        <button class="btn-icon" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotifications()">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger text-white rounded-pill" id="notif-badge" style="position:absolute;top:-2px;right:-2px;font-size:0.6rem;min-width:16px;height:16px;display:none"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notif-panel" style="width:380px;max-height:480px;overflow-y:auto">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                <h6 class="mb-0">Notifications</h6>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0" onclick="markAllRead()">Mark all read</button>
+                            </div>
+                            <div id="notif-list" class="notif-list"></div>
+                            <div id="notif-empty" class="text-center text-muted py-4" style="display:none">
+                                <i class="bi bi-bell-slash" style="font-size:1.5rem;display:block;margin-bottom:0.25rem"></i>
+                                No notifications
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topbar-user-btn" id="topbar-user-btn">
+                        <div class="avatar" id="topbar-avatar">SA</div>
+                        <span class="user-name-small d-none d-md-inline" id="topbar-user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+<div class="mb-4">
+    <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Reports & Analytics</h4>
+</div>
+
+<ul class="nav nav-tabs mb-4" id="reportTabs">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-revenue">Revenue</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-patients">Patients</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-appointments">Appointments</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-procedures">Procedures</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-lab-revenue">Lab Revenue</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-inventory">Inventory</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-audit">Audit Logs</button></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="tab-revenue">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>Revenue Summary</h6></div>
+                    <div class="card-body">
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <h5 id="rev-total">MK 0</h5>
+                                <small class="text-muted">Total Billed</small>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="text-success" id="rev-paid">MK 0</h5>
+                                <small class="text-muted">Total Paid</small>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="text-danger" id="rev-balance">MK 0</h5>
+                                <small class="text-muted">Outstanding</small>
+                            </div>
+                        </div>
+                        <canvas id="revenueBarChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>Payment Methods</h6></div>
+                    <div class="card-body">
+                        <canvas id="paymentPieChart" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4">
+                        <input type="date" class="form-control form-control-sm" id="rev-start">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="date" class="form-control form-control-sm" id="rev-end">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-sm btn-primary" onclick="loadRevenue()">Filter</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm" id="revenue-table">
+                        <thead><tr><th>Date</th><th>Invoices</th><th>Billed</th><th>Paid</th><th>Balance</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-patients">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="pat-total">0</h3>
+                        <small class="text-muted">Total Patients</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="pat-male">0</h3>
+                        <small class="text-muted">Male</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="pat-female">0</h3>
+                        <small class="text-muted">Female</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <canvas id="patientGenderChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-appointments">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>By Status</h6></div>
+                    <div class="card-body"><canvas id="aptStatusChart" height="200"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>By Type</h6></div>
+                    <div class="card-body"><canvas id="aptTypeChart" height="200"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-procedures">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="proc-total">0</h3>
+                        <small class="text-muted">Total Procedures</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="proc-today">0</h3>
+                        <small class="text-muted">Today</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="proc-short-stay">0</h3>
+                        <small class="text-muted">Short Stay</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="proc-nebulisation">0</h3>
+                        <small class="text-muted">Nebulisations</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-2">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header"><h6>By Type</h6></div>
+                    <div class="card-body"><canvas id="procTypeChart" height="200"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header"><h6>Monthly Trend</h6></div>
+                    <div class="card-body"><canvas id="procTrendChart" height="200"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><h6>Recent Procedures</h6></div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm" id="procedures-table">
+                        <thead><tr><th>Date</th><th>Patient</th><th>Type</th><th>Performed By</th><th>Notes</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="proc-empty" class="text-center text-muted py-3" style="display:none">No procedures recorded</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-lab-revenue">
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card"><div class="card-body text-center">
+                    <h3 class="text-success" id="lab-rev-total">MK 0</h3><small class="text-muted">Total Lab Revenue</small>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body text-center">
+                    <h3 id="lab-rev-today">MK 0</h3><small class="text-muted">Today</small>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body text-center">
+                    <h3 class="text-danger" id="lab-rev-pending">MK 0</h3><small class="text-muted">Pending</small>
+                </div></div>
+            </div>
+            <div class="col-md-3">
+                <div class="card"><div class="card-body text-center">
+                    <h3 id="lab-rev-count">0</h3><small class="text-muted">Total Invoices</small>
+                </div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6>Lab Revenue by Day</h6>
+                <div class="d-flex gap-2">
+                    <input type="date" class="form-control form-control-sm" id="lab-rev-from" style="width:auto">
+                    <input type="date" class="form-control form-control-sm" id="lab-rev-to" style="width:auto">
+                    <button class="btn btn-sm btn-primary" onclick="loadLabRevenue()"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="labRevenueChart" height="250"></canvas>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header"><h6>Recent Lab Invoices</h6></div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0"><thead><tr><th>Invoice</th><th>Patient</th><th>Date</th><th>Total</th><th>Paid</th><th>Status</th></tr></thead>
+                    <tbody id="lab-rev-table"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-inventory">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="inv-total-items">0</h3>
+                        <small class="text-muted">Total Items</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 id="inv-total-value">MK 0</h3>
+                        <small class="text-muted">Total Value</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="text-danger" id="inv-low-stock">0</h3>
+                        <small class="text-muted">Low Stock Items</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="text-warning" id="inv-expired">0</h3>
+                        <small class="text-muted">Expired Items</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-audit">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm" id="audit-table">
+                        <thead><tr><th>Date/Time</th><th>User</th><th>Action</th><th>Resource</th><th>Details</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <nav><ul class="pagination pagination-sm" id="audit-pagination"></ul></nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadRevenue();
+    loadPatientStats();
+    loadAppointmentStats();
+    loadProcedureStats();
+    loadLabRevenue();
+    loadInventoryStats();
+    loadAuditLogs(1);
+
+    const today = new Date();
+    document.getElementById('rev-end').value = today.toISOString().split('T')[0];
+    const monthAgo = new Date(today); monthAgo.setDate(today.getDate() - 30);
+    document.getElementById('rev-start').value = monthAgo.toISOString().split('T')[0];
+    document.getElementById('lab-rev-to').value = today.toISOString().split('T')[0];
+    document.getElementById('lab-rev-from').value = monthAgo.toISOString().split('T')[0];
+});
+
+async function loadRevenue() {
+    const start = document.getElementById('rev-start').value;
+    const end = document.getElementById('rev-end').value;
+    const res = await fetchWithAuth(`/reports/api/revenue?start=${start}&end=${end}`);
+    const data = await res.json();
+
+    let totalBilled = 0, totalPaid = 0, totalBalance = 0;
+    const tbody = document.querySelector('#revenue-table tbody');
+    tbody.innerHTML = '';
+    data.forEach(d => {
+        totalBilled += d.total_billed;
+        totalPaid += d.total_paid;
+        totalBalance += d.total_balance;
+        tbody.innerHTML += `<tr><td>${d.d}</td><td>${d.invoice_count}</td><td>MK ${d.total_billed.toLocaleString()}</td><td>MK ${d.total_paid.toLocaleString()}</td><td>MK ${d.total_balance.toLocaleString()}</td></tr>`;
+    });
+
+    document.getElementById('rev-total').textContent = 'MK ' + totalBilled.toLocaleString();
+    document.getElementById('rev-paid').textContent = 'MK ' + totalPaid.toLocaleString();
+    document.getElementById('rev-balance').textContent = 'MK ' + totalBalance.toLocaleString();
+
+    const ctx = document.getElementById('revenueBarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.map(d => d.d),
+            datasets: [
+                { label: 'Billed', data: data.map(d => d.total_billed), backgroundColor: '#16a34a', borderRadius: 4 },
+                { label: 'Paid', data: data.map(d => d.total_paid), backgroundColor: '#22c55e', borderRadius: 4 }
+            ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+}
+
+async function loadLabRevenue() {
+    const from = document.getElementById('lab-rev-from').value;
+    const to = document.getElementById('lab-rev-to').value;
+    let url = '/lab/invoices/api?';
+    if (from) url += 'date_from=' + from + '&';
+    if (to) url += 'date_to=' + to + '&';
+    const res = await fetchWithAuth(url);
+    const invoices = await res.json();
+
+    let totalRevenue = 0, todayRevenue = 0, pending = 0, totalCount = invoices.length;
+    const today = new Date().toISOString().split('T')[0];
+    const dailyData = {};
+    const tbody = document.getElementById('lab-rev-table');
+    tbody.innerHTML = '';
+
+    invoices.forEach(i => {
+        totalRevenue += i.amount_paid;
+        if (i.created_at && i.created_at.startsWith(today)) todayRevenue += i.amount_paid;
+        if (i.payment_status !== 'paid') pending += i.balance;
+        const day = (i.created_at || '').split(' ')[0];
+        if (!dailyData[day]) dailyData[day] = { billed: 0, paid: 0 };
+        dailyData[day].billed += i.total_amount;
+        dailyData[day].paid += i.amount_paid;
+        const sc = {pending:'warning',partial:'info',paid:'success'};
+        tbody.innerHTML += '<tr><td><span class="fw-semibold">' + esc(i.invoice_number) + '</span></td>' +
+            '<td>' + esc(i.p_first || '') + ' ' + esc(i.p_last || '') + '</td>' +
+            '<td>' + (i.created_at || '').split(' ')[0] + '</td>' +
+            '<td>MWK ' + Number(i.total_amount).toLocaleString() + '</td>' +
+            '<td>MWK ' + Number(i.amount_paid).toLocaleString() + '</td>' +
+            '<td><span class="badge bg-' + (sc[i.payment_status] || 'secondary') + '">' + i.payment_status + '</span></td></tr>';
+    });
+
+    document.getElementById('lab-rev-total').textContent = 'MK ' + totalRevenue.toLocaleString();
+    document.getElementById('lab-rev-today').textContent = 'MK ' + todayRevenue.toLocaleString();
+    document.getElementById('lab-rev-pending').textContent = 'MK ' + pending.toLocaleString();
+    document.getElementById('lab-rev-count').textContent = totalCount;
+
+    const labels = Object.keys(dailyData).sort();
+    const ctx = document.getElementById('labRevenueChart').getContext('2d');
+    if (window._labRevChart) window._labRevChart.destroy();
+    window._labRevChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Billed', data: labels.map(l => dailyData[l].billed), backgroundColor: '#3b82f6', borderRadius: 4 },
+                { label: 'Paid', data: labels.map(l => dailyData[l].paid), backgroundColor: '#22c55e', borderRadius: 4 }
+            ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+}
+
+async function loadPatientStats() {
+    const res = await fetchWithAuth('/reports/api/patients');
+    const data = await res.json();
+    document.getElementById('pat-total').textContent = data.total;
+    document.getElementById('pat-male').textContent = data.male;
+    document.getElementById('pat-female').textContent = data.female;
+
+    new Chart(document.getElementById('patientGenderChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{ data: [data.male, data.female], backgroundColor: ['#16a34a', '#22c55e'] }]
+        },
+        options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+}
+
+async function loadAppointmentStats() {
+    const res = await fetchWithAuth('/reports/api/appointments');
+    const data = await res.json();
+
+    new Chart(document.getElementById('aptStatusChart'), {
+        type: 'pie',
+        data: {
+            labels: data.by_status.map(s => s.status),
+            datasets: [{ data: data.by_status.map(s => s.c), backgroundColor: ['#f59e0b','#0ea5e9','#16a34a','#22c55e','#94a3b8','#dc2626'] }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+
+    new Chart(document.getElementById('aptTypeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: data.by_type.map(t => t.type),
+            datasets: [{ data: data.by_type.map(t => t.c), backgroundColor: ['#16a34a', '#22c55e'] }]
+        },
+        options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+}
+
+async function loadProcedureStats() {
+    const res = await fetchWithAuth('/reports/api/procedures');
+    const data = await res.json();
+    document.getElementById('proc-total').textContent = data.total;
+    document.getElementById('proc-today').textContent = data.today;
+
+    const typeMap = {};
+    data.by_type.forEach(t => { typeMap[t.type] = t.c; });
+    document.getElementById('proc-short-stay').textContent = typeMap['short_stay'] || 0;
+    document.getElementById('proc-nebulisation').textContent = typeMap['nebulisation'] || 0;
+
+    const typeLabels = { 'short_stay': 'Short Stay', 'nebulisation': 'Nebulisation', 'burn_wound': 'Burn Wound', 'other': 'Other' };
+    new Chart(document.getElementById('procTypeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: data.by_type.map(t => typeLabels[t.type] || t.type),
+            datasets: [{ data: data.by_type.map(t => t.c), backgroundColor: ['#16a34a', '#f59e0b', '#dc2626', '#94a3b8'] }]
+        },
+        options: { responsive: true, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle' } } } }
+    });
+
+    new Chart(document.getElementById('procTrendChart'), {
+        type: 'line',
+        data: {
+            labels: data.by_month.map(m => m.month).reverse(),
+            datasets: [{ label: 'Procedures', data: data.by_month.map(m => m.c).reverse(), borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.1)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+    });
+
+    const tbody = document.querySelector('#procedures-table tbody');
+    if (data.recent && data.recent.length) {
+        document.getElementById('proc-empty').style.display = 'none';
+        data.recent.forEach(p => {
+            tbody.innerHTML += `<tr><td>${p.created_at || ''}</td><td>${p.p_first || ''} ${p.p_last || ''}</td><td>${p.procedure_type || '-'}</td><td>${p.u_first || ''} ${p.u_last || ''}</td><td>${p.notes || '-'}</td></tr>`;
+        });
+    } else {
+        document.getElementById('proc-empty').style.display = '';
+    }
+}
+
+async function loadInventoryStats() {
+    const res = await fetchWithAuth('/reports/api/inventory');
+    const data = await res.json();
+    document.getElementById('inv-total-items').textContent = data.total_items;
+    document.getElementById('inv-total-value').textContent = 'MK ' + data.total_value.toLocaleString();
+    document.getElementById('inv-low-stock').textContent = data.low_stock;
+    document.getElementById('inv-expired').textContent = data.expired;
+}
+
+let auditPage = 1;
+async function loadAuditLogs(page) {
+    auditPage = page;
+    const res = await fetchWithAuth(`/reports/api/audit-logs?page=${page}`);
+    const data = await res.json();
+    const tbody = document.querySelector('#audit-table tbody');
+    tbody.innerHTML = '';
+    data.logs.forEach(l => {
+        tbody.innerHTML += `<tr><td>${new Date(l.created_at).toLocaleString()}</td><td>${l.username || 'System'}</td><td>${l.action}</td><td>${l.resource_type} #${l.resource_id || ''}</td><td>${l.details || ''}</td></tr>`;
+    });
+    const pagination = document.getElementById('audit-pagination');
+    pagination.innerHTML = '';
+    for (let i = 1; i <= data.pages; i++) {
+        pagination.innerHTML += `<li class="page-item ${i === page ? 'active' : ''}"><button class="page-link" onclick="loadAuditLogs(${i})">${i}</button></li>`;
+    }
+}
+</script>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!token) { window.location.href = '/auth/login'; return; }
+
+            const initials = (user.first_name || 'U').charAt(0) + (user.last_name || '').charAt(0);
+            document.getElementById('sidebar-user-name').textContent = user.first_name + ' ' + user.last_name;
+            document.getElementById('sidebar-user-role').textContent = user.role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('topbar-avatar').textContent = initials;
+            document.getElementById('topbar-user-name').textContent = user.first_name || 'User';
+
+            document.querySelectorAll('#sidebar-nav .nav-item').forEach(item => {
+                const roles = item.dataset.roles;
+                if (roles !== 'all' && !roles.split(',').includes(user.role)) {
+                    item.style.display = 'none';
+                }
+            });
+
+            const path = window.location.pathname;
+            document.querySelectorAll('#sidebar-nav .nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && path.startsWith(href) && href !== '/dashboard') {
+                    link.classList.add('active');
+                } else if (href === '/dashboard' && path === '/dashboard') {
+                    link.classList.add('active');
+                }
+            });
+
+            const titles = {
+                '/dashboard': 'Dashboard',
+                '/patients': 'Patients',
+                '/appointments': 'Appointments',
+                '/consultations': 'Consultations',
+                '/billing': 'Billing',
+                '/pharmacy': 'Pharmacy',
+                '/doctors': 'Doctors',
+                '/departments': 'Departments',
+                '/staff': 'Staff',
+                '/users': 'Users',
+                '/suppliers': 'Suppliers',
+                '/reports': 'Reports',
+                '/messages': 'Messages',
+            '/flow': 'Patient Flow',
+                '/lab': 'Lab',
+                '/prescriptions': 'Prescriptions',
+                '/settings/profile': 'My Profile',
+                '/settings/system': 'System Settings',
+                '/insurance/claims': 'Insurance Claims',
+                '/insurance/eligibility': 'Eligibility Verification',
+                '/insurance/providers': 'Insurance Providers',
+                '/backup': 'Backup',
+                '/yellow-book': 'Yellow Book',
+                '/reminders': 'Reminders'
+            };
+            for (const [key, val] of Object.entries(titles)) {
+                if (path.startsWith(key)) { document.getElementById('page-title').textContent = val; break; }
+            }
+        });
+
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) { var d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000); expires = '; expires=' + d.toUTCString(); }
+            document.cookie = name + '=' + (value || '') + expires + '; path=/';
+        }
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i=0; i < ca.length; i++) { var c = ca[i].trim(); if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length); }
+            return null;
+        }
+        function eraseCookie(name) { document.cookie = name + '=; Max-Age=-99999999; path=/'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+        function logout() {
+            eraseCookie('access_token');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+        }
+
+        // Sync token from localStorage to cookie for page navigation auth
+        (function() {
+            var token = localStorage.getItem('token');
+            if (token && !getCookie('access_token')) {
+                setCookie('access_token', token, 1);
+            }
+        })();
+
+        document.getElementById('global-search')?.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                window.location.href = '/patients?search=' + encodeURIComponent(this.value.trim());
+            }
+        });
+
+        // Notification system
+        async function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api?limit=15', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const notifs = await res.json();
+                const list = document.getElementById('notif-list');
+                const empty = document.getElementById('notif-empty');
+                list.innerHTML = '';
+                if (!notifs.length) {
+                    list.style.display = 'none';
+                    empty.style.display = 'block';
+                    return;
+                }
+                list.style.display = 'block';
+                empty.style.display = 'none';
+                const typeIcons = {
+                    info: 'bi-info-circle text-primary',
+                    success: 'bi-check-circle text-success',
+                    warning: 'bi-exclamation-triangle text-warning',
+                    danger: 'bi-exclamation-circle text-danger',
+                    message: 'bi-envelope text-info',
+                    lab: 'bi-flask text-primary',
+                    appointment: 'bi-calendar-check text-success',
+                    prescription: 'bi-prescription2 text-primary',
+                    insurance: 'bi-shield-check text-success'
+                };
+                notifs.forEach(n => {
+                    const icon = typeIcons[n.type] || typeIcons.info;
+                    const time = notifTime(n.created_at);
+                    list.innerHTML += '<div class="notif-item ' + (n.is_read ? '' : 'unread') + '" onclick="handleNotifClick(this, ' + n.id + ', \'' + (n.reference_url || '') + '\')">' +
+                        '<div class="d-flex gap-2">' +
+                        '<div class="notif-icon"><i class="bi ' + icon + '"></i></div>' +
+                        '<div class="flex-grow-1">' +
+                        '<div class="notif-title">' + notifEsc(n.title) + '</div>' +
+                        '<div class="notif-msg">' + notifEsc(n.message || '') + '</div>' +
+                        '<div class="notif-time">' + time + '</div>' +
+                        '</div>' +
+                        '<button class="notif-dismiss" onclick="event.stopPropagation(); dismissNotif(' + n.id + ', this)" title="Dismiss"><i class="bi bi-x"></i></button>' +
+                        '</div>' +
+                        '</div>';
+                });
+            } catch(e) {}
+        }
+
+        async function checkUnread() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api/unread-count', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                const badge = document.getElementById('notif-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+
+        async function handleNotifClick(el, id, url) {
+            if (!el.classList.contains('unread')) {
+                if (url) window.location.href = url;
+                return;
+            }
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id + '/read', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            el.classList.remove('unread');
+            checkUnread();
+            if (url) window.location.href = url;
+        }
+
+        async function dismissNotif(id, btn) {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            btn.closest('.notif-item').remove();
+            checkUnread();
+            const list = document.getElementById('notif-list');
+            if (!list.children.length) { list.style.display = 'none'; document.getElementById('notif-empty').style.display = 'block'; }
+        }
+
+        async function markAllRead() {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/read-all', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+            checkUnread();
+        }
+
+        function notifTime(ts) {
+            if (!ts) return '';
+            const diff = Date.now() - new Date(ts).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            const days = Math.floor(hrs / 24);
+            return days + 'd ago';
+        }
+
+        function notifEsc(s) {
+            if (!s) return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // Poll for unread notifications every 60 seconds
+        checkUnread();
+        setInterval(checkUnread, 60000);
+    </script>
+</body>
+</html>

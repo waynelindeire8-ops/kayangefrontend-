@@ -1,0 +1,10 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+/_pages/*
+  Cache-Control: no-cache
+/env.js
+  Cache-Control: no-store
+/static/*
+  Cache-Control: public, max-age=300

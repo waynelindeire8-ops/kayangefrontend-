@@ -1,0 +1,306 @@
+[
+ {
+  "rule": "/auth/login",
+  "template": "login.html"
+ },
+ {
+  "rule": "/appointments",
+  "template": "appointments/list.html"
+ },
+ {
+  "rule": "/appointments/new",
+  "template": "appointments/form.html"
+ },
+ {
+  "rule": "/appointments/calendar",
+  "template": "appointments/calendar.html"
+ },
+ {
+  "rule": "/backup",
+  "template": "backup/index.html"
+ },
+ {
+  "rule": "/billing",
+  "template": "billing/list.html"
+ },
+ {
+  "rule": "/billing/new",
+  "template": "billing/form.html"
+ },
+ {
+  "rule": "/billing/<int:id>",
+  "template": "billing/invoice.html"
+ },
+ {
+  "rule": "/billing/<int:id>/print",
+  "template": "billing/print.html"
+ },
+ {
+  "rule": "/certificates",
+  "template": "certificates/list.html"
+ },
+ {
+  "rule": "/consultations",
+  "template": "consultations/list.html"
+ },
+ {
+  "rule": "/consultations/new",
+  "template": "consultations/form.html"
+ },
+ {
+  "rule": "/consultations/<int:id>/edit",
+  "template": "consultations/form.html"
+ },
+ {
+  "rule": "/departments",
+  "template": "departments/list.html"
+ },
+ {
+  "rule": "/departments/new",
+  "template": "departments/form.html"
+ },
+ {
+  "rule": "/departments/<int:id>/edit",
+  "template": "departments/form.html"
+ },
+ {
+  "rule": "/doctors",
+  "template": "doctors/list.html"
+ },
+ {
+  "rule": "/doctors/new",
+  "template": "doctors/form.html"
+ },
+ {
+  "rule": "/doctors/<int:id>/edit",
+  "template": "doctors/form.html"
+ },
+ {
+  "rule": "/flow",
+  "template": "flow/overview.html"
+ },
+ {
+  "rule": "/insurance/providers",
+  "template": "insurance/providers.html"
+ },
+ {
+  "rule": "/insurance/eligibility",
+  "template": "insurance/eligibility.html"
+ },
+ {
+  "rule": "/insurance/claims",
+  "template": "insurance/claims.html"
+ },
+ {
+  "rule": "/insurance/claims/new",
+  "template": "insurance/claim_form.html"
+ },
+ {
+  "rule": "/insurance/claims/<int:id>",
+  "template": "insurance/claim_detail.html"
+ },
+ {
+  "rule": "/insurance/claims/<int:id>/edit",
+  "template": "insurance/claim_form.html"
+ },
+ {
+  "rule": "/lab",
+  "template": "lab/dashboard.html"
+ },
+ {
+  "rule": "/lab/orders",
+  "template": "lab/orders.html"
+ },
+ {
+  "rule": "/lab/orders/new",
+  "template": "lab/order_form.html"
+ },
+ {
+  "rule": "/lab/orders/<int:id>",
+  "template": "lab/order_detail.html"
+ },
+ {
+  "rule": "/lab/catalog",
+  "template": "lab/catalog.html"
+ },
+ {
+  "rule": "/lab/invoices",
+  "template": "lab/invoices.html"
+ },
+ {
+  "rule": "/lab/invoices/new",
+  "template": "lab/invoice_form.html"
+ },
+ {
+  "rule": "/lab/invoices/<int:id>",
+  "template": "lab/invoice_detail.html"
+ },
+ {
+  "rule": "/messages",
+  "template": "messages/inbox.html"
+ },
+ {
+  "rule": "/messages/sent",
+  "template": "messages/sent.html"
+ },
+ {
+  "rule": "/messages/compose",
+  "template": "messages/compose.html"
+ },
+ {
+  "rule": "/patients",
+  "template": "patients/list.html"
+ },
+ {
+  "rule": "/patients/new",
+  "template": "patients/form.html"
+ },
+ {
+  "rule": "/patients/<int:id>",
+  "template": "patients/detail.html"
+ },
+ {
+  "rule": "/patients/<int:id>/edit",
+  "template": "patients/form.html"
+ },
+ {
+  "rule": "/patients/import",
+  "template": "patients/import.html"
+ },
+ {
+  "rule": "/pharmacy",
+  "template": "pharmacy/inventory.html"
+ },
+ {
+  "rule": "/pharmacy/dispensing",
+  "template": "pharmacy/dispensing.html"
+ },
+ {
+  "rule": "/prescriptions",
+  "template": "prescriptions/list.html"
+ },
+ {
+  "rule": "/prescriptions/new",
+  "template": "prescriptions/form.html"
+ },
+ {
+  "rule": "/prescriptions/<int:id>",
+  "template": "prescriptions/detail.html"
+ },
+ {
+  "rule": "/prescriptions/<int:id>/edit",
+  "template": "prescriptions/form.html"
+ },
+ {
+  "rule": "/prescriptions/<int:id>/print",
+  "template": "prescriptions/print.html"
+ },
+ {
+  "rule": "/radiology",
+  "template": "radiology/dashboard.html"
+ },
+ {
+  "rule": "/radiology/orders",
+  "template": "radiology/orders.html"
+ },
+ {
+  "rule": "/radiology/orders/new",
+  "template": "radiology/order_form.html"
+ },
+ {
+  "rule": "/radiology/orders/<int:id>",
+  "template": "radiology/order_detail.html"
+ },
+ {
+  "rule": "/reminders",
+  "template": "reminders.html"
+ },
+ {
+  "rule": "/reports",
+  "template": "reports/index.html"
+ },
+ {
+  "rule": "/reports/queue",
+  "template": "queue/index.html"
+ },
+ {
+  "rule": "/settings/profile",
+  "template": "settings/profile.html"
+ },
+ {
+  "rule": "/settings/system",
+  "template": "settings/system.html"
+ },
+ {
+  "rule": "/short-stay",
+  "template": "short_stay/dashboard.html"
+ },
+ {
+  "rule": "/short-stay/admissions",
+  "template": "short_stay/admissions.html"
+ },
+ {
+  "rule": "/staff",
+  "template": "staff/list.html"
+ },
+ {
+  "rule": "/staff/new",
+  "template": "staff/form.html"
+ },
+ {
+  "rule": "/staff/<int:id>/edit",
+  "template": "staff/form.html"
+ },
+ {
+  "rule": "/staff/schedule",
+  "template": "staff/schedule.html"
+ },
+ {
+  "rule": "/suppliers",
+  "template": "suppliers/list.html"
+ },
+ {
+  "rule": "/telemedicine",
+  "template": "telemedicine/dashboard.html"
+ },
+ {
+  "rule": "/telemedicine/sessions",
+  "template": "telemedicine/sessions.html"
+ },
+ {
+  "rule": "/telemedicine/sessions/new",
+  "template": "telemedicine/session_form.html"
+ },
+ {
+  "rule": "/telemedicine/sessions/<int:id>",
+  "template": "telemedicine/session_detail.html"
+ },
+ {
+  "rule": "/telemedicine/sessions/<int:id>/room",
+  "template": "telemedicine/video_room.html"
+ },
+ {
+  "rule": "/telemedicine/waiting-room",
+  "template": "telemedicine/waiting_room.html"
+ },
+ {
+  "rule": "/users",
+  "template": "users/list.html"
+ },
+ {
+  "rule": "/yellow-book",
+  "template": "yellow_book/patients.html"
+ },
+ {
+  "rule": "/yellow-book/patient/<int:patient_id>",
+  "template": "yellow_book/patient_detail.html"
+ },
+ {
+  "rule": "/dashboard",
+  "template": "dashboard.html"
+ },
+ {
+  "rule": "/help",
+  "template": "help.html"
+ }
+]

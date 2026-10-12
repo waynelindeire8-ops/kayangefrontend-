@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayange Clinic Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/env.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><i class="bi bi-hospital"></i></div>
+                <div class="logo-text">
+                    <h6>Kayange Clinic</h6>
+                    <small>Management System</small>
+                </div>
+            </div>
+
+            <div class="sidebar-section">Main</div>
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/dashboard"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/patients"><i class="bi bi-people"></i>Patients</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/reminders"><i class="bi bi-bell"></i>Reminders</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,locum_doctor">
+                    <a class="nav-link" href="/appointments"><i class="bi bi-calendar-check"></i>Appointments</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk">
+                    <a class="nav-link" href="/reports"><i class="bi bi-bar-chart-line"></i>Reports</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,nurse">
+                    <a class="nav-link" href="/reports/queue"><i class="bi bi-list-ol"></i>Patient Queue</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk,nurse">
+                    <a class="nav-link" href="/flow"><i class="bi bi-hospital"></i>Patient Flow</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/messages">
+                        <i class="bi bi-envelope"></i>Messages
+                        <span class="badge bg-danger ms-auto" id="msg-unread-badge" style="display:none;font-size:0.6rem">0</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Clinical</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="doctor,locum_doctor,nurse,locum_nurse,admin">
+                    <a class="nav-link" href="/consultations"><i class="bi bi-clipboard2-pulse"></i>Consultations</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/billing"><i class="bi bi-wallet2"></i>Billing</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/pharmacy"><i class="bi bi-capsule"></i>Pharmacy</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/lab"><i class="bi bi-flask"></i>Lab</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,lab_supervisor">
+                    <a class="nav-link" href="/lab/invoices"><i class="bi bi-receipt"></i>Lab Invoices</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/radiology"><i class="bi bi-camera-reels"></i>Radiology</a>
+                </li>
+                <li class="nav-item" data-roles="doctor,locum_doctor,admin">
+                    <a class="nav-link" href="/prescriptions"><i class="bi bi-prescription2"></i>Prescriptions</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/telemedicine"><i class="bi bi-camera-video"></i>Telemedicine</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/short-stay"><i class="bi bi-hospital"></i>Short Stay</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/certificates"><i class="bi bi-file-earmark-medical"></i>Certificates</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,nurse">
+                    <a class="nav-link" href="/yellow-book"><i class="bi bi-journal-medical"></i>Yellow Book</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Insurance</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/claims"><i class="bi bi-file-earmark-medical"></i>Claims</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/eligibility"><i class="bi bi-shield-check"></i>Eligibility</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/insurance/providers"><i class="bi bi-building"></i>Providers</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Administration</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/doctors"><i class="bi bi-stethoscope"></i>Doctors</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/departments"><i class="bi bi-building"></i>Departments</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/staff"><i class="bi bi-gear"></i>Staff</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/users"><i class="bi bi-people"></i>Users</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/suppliers"><i class="bi bi-truck"></i>Suppliers</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/backup"><i class="bi bi-cloud-arrow-up"></i>Backup</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Account</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/settings/profile"><i class="bi bi-person"></i>Profile</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/settings/system"><i class="bi bi-sliders"></i>System Settings</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/help"><i class="bi bi-question-circle"></i>Help</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link logout-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-left"></i>Logout</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-user" id="sidebar-user-area">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="user-avatar" id="user-avatar">SA</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebar-user-name">System Admin</div>
+                        <div class="user-role" id="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn d-lg-none p-0 border-0" onclick="toggleSidebar()" style="font-size:1.25rem">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h5 class="page-title" id="page-title">Dashboard</h5>
+                </div>
+                <div class="topbar-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search patients..." id="global-search">
+                </div>
+                <div class="topbar-actions">
+                    <div class="dropdown" id="notif-dropdown">
+                        <button class="btn-icon" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotifications()">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger text-white rounded-pill" id="notif-badge" style="position:absolute;top:-2px;right:-2px;font-size:0.6rem;min-width:16px;height:16px;display:none"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notif-panel" style="width:380px;max-height:480px;overflow-y:auto">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                <h6 class="mb-0">Notifications</h6>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0" onclick="markAllRead()">Mark all read</button>
+                            </div>
+                            <div id="notif-list" class="notif-list"></div>
+                            <div id="notif-empty" class="text-center text-muted py-4" style="display:none">
+                                <i class="bi bi-bell-slash" style="font-size:1.5rem;display:block;margin-bottom:0.25rem"></i>
+                                No notifications
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topbar-user-btn" id="topbar-user-btn">
+                        <div class="avatar" id="topbar-avatar">SA</div>
+                        <span class="user-name-small d-none d-md-inline" id="topbar-user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+<div class="page-header">
+    <h4><i class="bi bi-capsule"></i> Pharmacy Inventory</h4>
+    <div>
+        <a href="/pharmacy/dispensing" class="btn btn-outline-primary me-2"><i class="bi bi-cart-plus me-1"></i>Dispensing</a>
+        <button class="btn btn-primary" onclick="showAddItem()"><i class="bi bi-plus-lg me-1"></i>Add Drug</button>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="bi bi-capsule"></i></div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Total Drugs</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="bi bi-box-seam"></i></div>
+            <div class="stat-value" id="stat-stock">0</div>
+            <div class="stat-label">Total Stock</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon yellow"><i class="bi bi-exclamation-triangle"></i></div>
+            <div class="stat-value" id="stat-low">0</div>
+            <div class="stat-label">Low Stock</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon red"><i class="bi bi-x-circle"></i></div>
+            <div class="stat-value" id="stat-oos">0</div>
+            <div class="stat-label">Out of Stock</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search drugs...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select form-select-sm" id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Antibiotics">Antibiotics</option>
+                    <option value="Analgesics">Analgesics</option>
+                    <option value="Diabetes">Diabetes</option>
+                    <option value="Respiratory">Respiratory</option>
+                    <option value="GI">Gastrointestinal</option>
+                    <option value="Antihistamines">Antihistamines</option>
+                    <option value="Topical">Topical</option>
+                    <option value="Supplements">Supplements</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table" id="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Drug Name</th>
+                        <th>Generic</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Expiry</th>
+                        <th>Reorder</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="inventoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="invModalTitle">Add Drug</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form id="inventory-form">
+                    <div class="mb-3"><label class="form-label">Drug Name *</label><input type="text" class="form-control" id="drug_name" required></div>
+                    <div class="mb-3"><label class="form-label">Generic Name</label><input type="text" class="form-control" id="generic_name"></div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6"><label class="form-label">Category</label><select class="form-select" id="category"><option value="">Select...</option><option value="Antibiotics">Antibiotics</option><option value="Analgesics">Analgesics</option><option value="Diabetes">Diabetes</option><option value="Respiratory">Respiratory</option><option value="GI">Gastrointestinal</option><option value="Antihistamines">Antihistamines</option><option value="Topical">Topical</option><option value="Supplements">Supplements</option><option value="Other">Other</option></select></div>
+                        <div class="col-md-6"><label class="form-label">Supplier</label>
+                            <select class="form-select" id="supplier"><option value="">Select supplier...</option></select></div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4"><label class="form-label">Stock Qty</label><input type="number" class="form-control" id="stock_quantity" value="0" min="0"></div>
+                        <div class="col-md-4"><label class="form-label">Unit Price (MK)</label><input type="number" class="form-control" id="unit_price" step="0.01" value="0"></div>
+                        <div class="col-md-4"><label class="form-label">Expiry Date</label><input type="date" class="form-control" id="expiry_date"></div>
+                    </div>
+                    <div class="mb-3"><label class="form-label">Reorder Level</label><input type="number" class="form-control" id="reorder_level" value="10" min="0"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveItem()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let editingId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+    loadTable();
+    loadSuppliers();
+    document.getElementById('searchInput').addEventListener('keyup', function() { loadTable(this.value); });
+    document.getElementById('categoryFilter').addEventListener('change', function() { loadTable(document.getElementById('searchInput').value); });
+});
+
+async function loadStats() {
+    try {
+        const res = await fetchWithAuth('/pharmacy/api/inventory');
+        const items = await res.json();
+        const totalStock = items.reduce((s, i) => s + (i.stock_quantity || 0), 0);
+        const lowStock = items.filter(i => i.stock_quantity > 0 && i.stock_quantity <= (i.reorder_level || 10)).length;
+        const outOfStock = items.filter(i => i.stock_quantity <= 0).length;
+
+        document.getElementById('stat-total').textContent = items.length;
+        document.getElementById('stat-stock').textContent = totalStock;
+        document.getElementById('stat-low').textContent = lowStock;
+        document.getElementById('stat-oos').textContent = outOfStock;
+    } catch(e) {}
+}
+
+async function loadSuppliers() {
+    const res = await fetchWithAuth('/suppliers/api?active=1');
+    const suppliers = await res.json();
+    const sel = document.getElementById('supplier');
+    sel.innerHTML = '<option value="">Select supplier...</option>';
+    suppliers.forEach(s => {
+        const o = document.createElement('option'); o.value = s.name; o.textContent = s.name;
+        sel.appendChild(o);
+    });
+}
+
+function loadTable(search) {
+    let url = '/pharmacy/api/inventory';
+    const params = [];
+    if (search) params.push('search=' + encodeURIComponent(search));
+    if (params.length) url += '?' + params.join('&');
+
+    if ($.fn.DataTable.isDataTable('#inventory-table')) { $('#inventory-table').DataTable().destroy(); }
+    $('#inventory-table').DataTable({
+        ajax: function(data, callback, settings) { fetchWithAuth(url + '&' + $.param(data)).then(r => { if (r.status === 401) throw new Error('Unauthorized'); return r.json(); }).then(d => callback({data:d})).catch(() => callback({data:[]})); },
+        columns: [
+            { data: 'drug_name', render: d => '<span class="fw-semibold" style="color:#0f172a">' + d + '</span>' },
+            { data: 'generic_name', render: d => d || '-' },
+            { data: 'category', render: d => d ? '<span class="badge bg-light text-dark">' + d + '</span>' : '-' },
+            { data: null, render: d => {
+                if (d.stock_quantity <= 0) return '<span class="badge bg-danger">Out of Stock (0)</span>';
+                if (d.stock_quantity <= (d.reorder_level || 10)) return '<span class="badge bg-warning text-dark">Low (' + d.stock_quantity + '</span>';
+                return '<span class="badge bg-success">' + d.stock_quantity + '</span>';
+            }},
+            { data: null, render: d => '<span class="fw-semibold">MK ' + (d.unit_price || 0).toLocaleString() + '</span>' },
+            { data: 'expiry_date', render: d => { if (!d) return '-'; const exp = new Date(d); const now = new Date(); const daysLeft = Math.ceil((exp - now) / (1000*60*60*24)); return daysLeft < 0 ? '<span class="badge bg-danger">Expired</span>' : daysLeft < 90 ? '<span class="badge bg-warning text-dark">' + d + '</span>' : '<span class="badge bg-secondary">' + d + '</span>'; }},
+            { data: 'reorder_level' },
+            { data: null, render: d => '<div class="d-flex gap-1"><button class="btn-action" onclick="showSchemePrices(' + d.id + ', \'' + d.drug_name.replace(/'/g, "\\'") + '\')" title="Scheme Prices"><i class="bi bi-tag"></i></button><button class="btn-action edit" onclick="editItem(' + d.id + ')" title="Edit"><i class="bi bi-pencil"></i></button><button class="btn-action delete" onclick="deleteItem(' + d.id + ')" title="Delete"><i class="bi bi-trash"></i></button></div>' }
+        ],
+        order: [[0, 'asc']],
+        pageLength: 15,
+        language: { search: '', searchPlaceholder: 'Search drugs...' }
+    });
+}
+
+function showAddItem() {
+    editingId = null;
+    document.getElementById('invModalTitle').textContent = 'Add Drug';
+    document.getElementById('inventory-form').reset();
+    new bootstrap.Modal(document.getElementById('inventoryModal')).show();
+}
+
+async function editItem(id) {
+    editingId = id;
+    document.getElementById('invModalTitle').textContent = 'Edit Drug';
+    const res = await fetchWithAuth('/pharmacy/api/inventory/' + id);
+    const d = await res.json();
+    document.getElementById('drug_name').value = d.drug_name;
+    document.getElementById('generic_name').value = d.generic_name || '';
+    document.getElementById('category').value = d.category || '';
+    document.getElementById('stock_quantity').value = d.stock_quantity;
+    document.getElementById('unit_price').value = d.unit_price;
+    document.getElementById('expiry_date').value = d.expiry_date || '';
+    document.getElementById('supplier').value = d.supplier || '';
+    document.getElementById('reorder_level').value = d.reorder_level;
+    new bootstrap.Modal(document.getElementById('inventoryModal')).show();
+}
+
+async function saveItem() {
+    const data = {
+        drug_name: document.getElementById('drug_name').value,
+        generic_name: document.getElementById('generic_name').value,
+        category: document.getElementById('category').value,
+        stock_quantity: parseInt(document.getElementById('stock_quantity').value) || 0,
+        unit_price: parseFloat(document.getElementById('unit_price').value) || 0,
+        expiry_date: document.getElementById('expiry_date').value || null,
+        supplier: document.getElementById('supplier').value,
+        reorder_level: parseInt(document.getElementById('reorder_level').value) || 10
+    };
+    if (!data.drug_name) { alert('Drug name required'); return; }
+    const url = editingId ? '/pharmacy/api/inventory/' + editingId : '/pharmacy/api/inventory';
+    const method = editingId ? 'PUT' : 'POST';
+    const res = await fetchWithAuth(url, { method, body: JSON.stringify(data) });
+    if (res.ok) { bootstrap.Modal.getInstance(document.getElementById('inventoryModal')).hide(); loadTable(); loadStats(); }
+    else alert('Error saving');
+}
+
+async function deleteItem(id) {
+    if (!confirm('Delete this item?')) return;
+    await fetchWithAuth('/pharmacy/api/inventory/' + id, { method: 'DELETE' });
+    loadTable();
+    loadStats();
+}
+
+let currentSchemeDrugId = null;
+
+async function showSchemePrices(drugId, drugName) {
+    currentSchemeDrugId = drugId;
+    document.getElementById('scheme-drug-name').textContent = drugName;
+    const res = await fetchWithAuth('/pharmacy/api/inventory/' + drugId + '/scheme-prices');
+    const prices = await res.json();
+    const body = document.getElementById('scheme-prices-body');
+    if (prices.length === 0) {
+        body.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">No scheme prices set</td></tr>';
+    } else {
+        body.innerHTML = prices.map(p =>
+            '<tr><td>' + p.provider_name + '</td><td>MK ' + p.scheme_price.toLocaleString() + '</td><td>' + (p.provider_code || '') + '</td><td><button class="btn-action delete" onclick="deleteSchemePrice(' + p.id + ')" title="Remove"><i class="bi bi-trash"></i></button></td></tr>'
+        ).join('');
+    }
+    await loadProvidersForSelect();
+    new bootstrap.Modal(document.getElementById('schemePricesModal')).show();
+}
+
+async function loadProvidersForSelect() {
+    const res = await fetchWithAuth('/insurance/api/providers');
+    const providers = await res.json();
+    const sel = document.getElementById('sp-provider');
+    sel.innerHTML = '<option value="">Select scheme...</option>';
+    providers.forEach(p => {
+        const o = document.createElement('option'); o.value = p.id; o.textContent = p.name;
+        sel.appendChild(o);
+    });
+}
+
+async function saveSchemePrice() {
+    const providerId = document.getElementById('sp-provider').value;
+    const price = document.getElementById('sp-price').value;
+    if (!providerId || !price) { alert('Select a scheme and enter a price'); return; }
+    await fetchWithAuth('/pharmacy/api/inventory/' + currentSchemeDrugId + '/scheme-prices', {
+        method: 'POST',
+        body: JSON.stringify({ provider_id: parseInt(providerId), scheme_price: parseFloat(price) })
+    });
+    showSchemePrices(currentSchemeDrugId, document.getElementById('scheme-drug-name').textContent);
+}
+
+async function deleteSchemePrice(priceId) {
+    if (!confirm('Remove this scheme price?')) return;
+    await fetchWithAuth('/pharmacy/api/inventory/' + currentSchemeDrugId + '/scheme-prices/' + priceId, { method: 'DELETE' });
+    showSchemePrices(currentSchemeDrugId, document.getElementById('scheme-drug-name').textContent);
+}
+</script>
+
+<div class="modal fade" id="schemePricesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-tag me-1"></i>Scheme Prices - <span id="scheme-drug-name"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive mb-3">
+                    <table class="table table-sm">
+                        <thead><tr><th>Scheme</th><th>Price (MK)</th><th>Code</th><th></th></tr></thead>
+                        <tbody id="scheme-prices-body"></tbody>
+                    </table>
+                </div>
+                <div class="card bg-light">
+                    <div class="card-body py-2">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-5"><select class="form-select form-select-sm" id="sp-provider"></select></div>
+                            <div class="col-md-4"><input type="number" class="form-control form-control-sm" id="sp-price" placeholder="Price (MK)" step="0.01"></div>
+                            <div class="col-md-3"><button class="btn btn-primary btn-sm w-100" onclick="saveSchemePrice()"><i class="bi bi-plus me-1"></i>Add</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!token) { window.location.href = '/auth/login'; return; }
+
+            const initials = (user.first_name || 'U').charAt(0) + (user.last_name || '').charAt(0);
+            document.getElementById('sidebar-user-name').textContent = user.first_name + ' ' + user.last_name;
+            document.getElementById('sidebar-user-role').textContent = user.role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('topbar-avatar').textContent = initials;
+            document.getElementById('topbar-user-name').textContent = user.first_name || 'User';
+
+            document.querySelectorAll('#sidebar-nav .nav-item').forEach(item => {
+                const roles = item.dataset.roles;
+                if (roles !== 'all' && !roles.split(',').includes(user.role)) {
+                    item.style.display = 'none';
+                }
+            });
+
+            const path = window.location.pathname;
+            document.querySelectorAll('#sidebar-nav .nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && path.startsWith(href) && href !== '/dashboard') {
+                    link.classList.add('active');
+                } else if (href === '/dashboard' && path === '/dashboard') {
+                    link.classList.add('active');
+                }
+            });
+
+            const titles = {
+                '/dashboard': 'Dashboard',
+                '/patients': 'Patients',
+                '/appointments': 'Appointments',
+                '/consultations': 'Consultations',
+                '/billing': 'Billing',
+                '/pharmacy': 'Pharmacy',
+                '/doctors': 'Doctors',
+                '/departments': 'Departments',
+                '/staff': 'Staff',
+                '/users': 'Users',
+                '/suppliers': 'Suppliers',
+                '/reports': 'Reports',
+                '/messages': 'Messages',
+            '/flow': 'Patient Flow',
+                '/lab': 'Lab',
+                '/prescriptions': 'Prescriptions',
+                '/settings/profile': 'My Profile',
+                '/settings/system': 'System Settings',
+                '/insurance/claims': 'Insurance Claims',
+                '/insurance/eligibility': 'Eligibility Verification',
+                '/insurance/providers': 'Insurance Providers',
+                '/backup': 'Backup',
+                '/yellow-book': 'Yellow Book',
+                '/reminders': 'Reminders'
+            };
+            for (const [key, val] of Object.entries(titles)) {
+                if (path.startsWith(key)) { document.getElementById('page-title').textContent = val; break; }
+            }
+        });
+
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) { var d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000); expires = '; expires=' + d.toUTCString(); }
+            document.cookie = name + '=' + (value || '') + expires + '; path=/';
+        }
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i=0; i < ca.length; i++) { var c = ca[i].trim(); if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length); }
+            return null;
+        }
+        function eraseCookie(name) { document.cookie = name + '=; Max-Age=-99999999; path=/'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+        function logout() {
+            eraseCookie('access_token');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+        }
+
+        // Sync token from localStorage to cookie for page navigation auth
+        (function() {
+            var token = localStorage.getItem('token');
+            if (token && !getCookie('access_token')) {
+                setCookie('access_token', token, 1);
+            }
+        })();
+
+        document.getElementById('global-search')?.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                window.location.href = '/patients?search=' + encodeURIComponent(this.value.trim());
+            }
+        });
+
+        // Notification system
+        async function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api?limit=15', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const notifs = await res.json();
+                const list = document.getElementById('notif-list');
+                const empty = document.getElementById('notif-empty');
+                list.innerHTML = '';
+                if (!notifs.length) {
+                    list.style.display = 'none';
+                    empty.style.display = 'block';
+                    return;
+                }
+                list.style.display = 'block';
+                empty.style.display = 'none';
+                const typeIcons = {
+                    info: 'bi-info-circle text-primary',
+                    success: 'bi-check-circle text-success',
+                    warning: 'bi-exclamation-triangle text-warning',
+                    danger: 'bi-exclamation-circle text-danger',
+                    message: 'bi-envelope text-info',
+                    lab: 'bi-flask text-primary',
+                    appointment: 'bi-calendar-check text-success',
+                    prescription: 'bi-prescription2 text-primary',
+                    insurance: 'bi-shield-check text-success'
+                };
+                notifs.forEach(n => {
+                    const icon = typeIcons[n.type] || typeIcons.info;
+                    const time = notifTime(n.created_at);
+                    list.innerHTML += '<div class="notif-item ' + (n.is_read ? '' : 'unread') + '" onclick="handleNotifClick(this, ' + n.id + ', \'' + (n.reference_url || '') + '\')">' +
+                        '<div class="d-flex gap-2">' +
+                        '<div class="notif-icon"><i class="bi ' + icon + '"></i></div>' +
+                        '<div class="flex-grow-1">' +
+                        '<div class="notif-title">' + notifEsc(n.title) + '</div>' +
+                        '<div class="notif-msg">' + notifEsc(n.message || '') + '</div>' +
+                        '<div class="notif-time">' + time + '</div>' +
+                        '</div>' +
+                        '<button class="notif-dismiss" onclick="event.stopPropagation(); dismissNotif(' + n.id + ', this)" title="Dismiss"><i class="bi bi-x"></i></button>' +
+                        '</div>' +
+                        '</div>';
+                });
+            } catch(e) {}
+        }
+
+        async function checkUnread() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api/unread-count', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                const badge = document.getElementById('notif-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+
+        async function handleNotifClick(el, id, url) {
+            if (!el.classList.contains('unread')) {
+                if (url) window.location.href = url;
+                return;
+            }
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id + '/read', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            el.classList.remove('unread');
+            checkUnread();
+            if (url) window.location.href = url;
+        }
+
+        async function dismissNotif(id, btn) {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            btn.closest('.notif-item').remove();
+            checkUnread();
+            const list = document.getElementById('notif-list');
+            if (!list.children.length) { list.style.display = 'none'; document.getElementById('notif-empty').style.display = 'block'; }
+        }
+
+        async function markAllRead() {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/read-all', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+            checkUnread();
+        }
+
+        function notifTime(ts) {
+            if (!ts) return '';
+            const diff = Date.now() - new Date(ts).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            const days = Math.floor(hrs / 24);
+            return days + 'd ago';
+        }
+
+        function notifEsc(s) {
+            if (!s) return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // Poll for unread notifications every 60 seconds
+        checkUnread();
+        setInterval(checkUnread, 60000);
+    </script>
+</body>
+</html>

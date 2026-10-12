@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayange Clinic Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/env.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><i class="bi bi-hospital"></i></div>
+                <div class="logo-text">
+                    <h6>Kayange Clinic</h6>
+                    <small>Management System</small>
+                </div>
+            </div>
+
+            <div class="sidebar-section">Main</div>
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/dashboard"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/patients"><i class="bi bi-people"></i>Patients</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/reminders"><i class="bi bi-bell"></i>Reminders</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,locum_doctor">
+                    <a class="nav-link" href="/appointments"><i class="bi bi-calendar-check"></i>Appointments</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk">
+                    <a class="nav-link" href="/reports"><i class="bi bi-bar-chart-line"></i>Reports</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,doctor,nurse">
+                    <a class="nav-link" href="/reports/queue"><i class="bi bi-list-ol"></i>Patient Queue</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,front_desk,nurse">
+                    <a class="nav-link" href="/flow"><i class="bi bi-hospital"></i>Patient Flow</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/messages">
+                        <i class="bi bi-envelope"></i>Messages
+                        <span class="badge bg-danger ms-auto" id="msg-unread-badge" style="display:none;font-size:0.6rem">0</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Clinical</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="doctor,locum_doctor,nurse,locum_nurse,admin">
+                    <a class="nav-link" href="/consultations"><i class="bi bi-clipboard2-pulse"></i>Consultations</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/billing"><i class="bi bi-wallet2"></i>Billing</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/pharmacy"><i class="bi bi-capsule"></i>Pharmacy</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/lab"><i class="bi bi-flask"></i>Lab</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk,lab_supervisor">
+                    <a class="nav-link" href="/lab/invoices"><i class="bi bi-receipt"></i>Lab Invoices</a>
+                </li>
+                <li class="nav-item" data-roles="admin,lab_staff,lab_supervisor,lab_tech,lab_care,doctor,locum_doctor">
+                    <a class="nav-link" href="/radiology"><i class="bi bi-camera-reels"></i>Radiology</a>
+                </li>
+                <li class="nav-item" data-roles="doctor,locum_doctor,admin">
+                    <a class="nav-link" href="/prescriptions"><i class="bi bi-prescription2"></i>Prescriptions</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/telemedicine"><i class="bi bi-camera-video"></i>Telemedicine</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/short-stay"><i class="bi bi-hospital"></i>Short Stay</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,locum_doctor,front_desk">
+                    <a class="nav-link" href="/certificates"><i class="bi bi-file-earmark-medical"></i>Certificates</a>
+                </li>
+                <li class="nav-item" data-roles="admin,doctor,nurse">
+                    <a class="nav-link" href="/yellow-book"><i class="bi bi-journal-medical"></i>Yellow Book</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Insurance</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/claims"><i class="bi bi-file-earmark-medical"></i>Claims</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/insurance/eligibility"><i class="bi bi-shield-check"></i>Eligibility</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/insurance/providers"><i class="bi bi-building"></i>Providers</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Administration</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/doctors"><i class="bi bi-stethoscope"></i>Doctors</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/departments"><i class="bi bi-building"></i>Departments</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/staff"><i class="bi bi-gear"></i>Staff</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/users"><i class="bi bi-people"></i>Users</a>
+                </li>
+                <li class="nav-item" data-roles="admin,front_desk">
+                    <a class="nav-link" href="/suppliers"><i class="bi bi-truck"></i>Suppliers</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/backup"><i class="bi bi-cloud-arrow-up"></i>Backup</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section">Account</div>
+            <ul class="sidebar-nav">
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/settings/profile"><i class="bi bi-person"></i>Profile</a>
+                </li>
+                <li class="nav-item" data-roles="admin">
+                    <a class="nav-link" href="/settings/system"><i class="bi bi-sliders"></i>System Settings</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link" href="/help"><i class="bi bi-question-circle"></i>Help</a>
+                </li>
+                <li class="nav-item" data-roles="all">
+                    <a class="nav-link logout-link" href="#" onclick="logout()"><i class="bi bi-box-arrow-left"></i>Logout</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-user" id="sidebar-user-area">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="user-avatar" id="user-avatar">SA</div>
+                    <div class="user-info">
+                        <div class="user-name" id="sidebar-user-name">System Admin</div>
+                        <div class="user-role" id="sidebar-user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn d-lg-none p-0 border-0" onclick="toggleSidebar()" style="font-size:1.25rem">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h5 class="page-title" id="page-title">Dashboard</h5>
+                </div>
+                <div class="topbar-search">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search patients..." id="global-search">
+                </div>
+                <div class="topbar-actions">
+                    <div class="dropdown" id="notif-dropdown">
+                        <button class="btn-icon" title="Notifications" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotifications()">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-danger text-white rounded-pill" id="notif-badge" style="position:absolute;top:-2px;right:-2px;font-size:0.6rem;min-width:16px;height:16px;display:none"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end notif-panel" style="width:380px;max-height:480px;overflow-y:auto">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                                <h6 class="mb-0">Notifications</h6>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0" onclick="markAllRead()">Mark all read</button>
+                            </div>
+                            <div id="notif-list" class="notif-list"></div>
+                            <div id="notif-empty" class="text-center text-muted py-4" style="display:none">
+                                <i class="bi bi-bell-slash" style="font-size:1.5rem;display:block;margin-bottom:0.25rem"></i>
+                                No notifications
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topbar-user-btn" id="topbar-user-btn">
+                        <div class="avatar" id="topbar-avatar">SA</div>
+                        <span class="user-name-small d-none d-md-inline" id="topbar-user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                
+<div class="mb-4">
+    <a href="/patients" class="btn btn-sm btn-outline-secondary mb-2"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h4 class="mb-1" id="patient-name"></h4>
+            <span class="badge bg-secondary me-2" id="patient-id-display"></span>
+            <span class="text-muted" id="patient-dob-age"></span>
+        </div>
+        <div>
+            <a href="#" id="edit-patient-btn" class="btn btn-outline-warning btn-sm"><i class="bi bi-pencil me-1"></i>Edit</a>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs mb-4" id="patientTabs">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info">Info</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#history">Visit History</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#medical">Medical</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#billing-tab">Billing</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#documents-tab"><i class="bi bi-file-earmark me-1"></i>Documents</button></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="info">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6>Contact Details</h6>
+                        <table class="table table-sm">
+                            <tr><td class="text-muted">Phone</td><td id="p-phone"></td></tr>
+                            <tr><td class="text-muted">Email</td><td id="p-email"></td></tr>
+                            <tr><td class="text-muted">Address</td><td id="p-address"></td></tr>
+                        </table>
+                        <h6 class="mt-3">Emergency Contact</h6>
+                        <table class="table table-sm">
+                            <tr><td class="text-muted">Name</td><td id="p-emergency-name"></td></tr>
+                            <tr><td class="text-muted">Phone</td><td id="p-emergency-phone"></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card" id="info-tab-card">
+                    <div class="card-body">
+                        <h6>Medical & Insurance</h6>
+                        <table class="table table-sm">
+                            <tr><td class="text-muted">Blood Group</td><td id="p-blood"></td></tr>
+                            <tr><td class="text-muted">Insurance Scheme</td><td id="p-scheme-id"></td></tr>
+                            <tr><td class="text-muted">Scheme Number</td><td id="p-scheme-number"></td></tr>
+                            <tr><td class="text-muted">Scheme Type</td><td id="p-scheme-type"></td></tr>
+                        </table>
+                        <h6 class="mt-3">Allergies</h6>
+                        <div id="p-allergies"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="history">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Date</th><th>Type</th><th>Doctor</th><th>Details</th></tr>
+                        </thead>
+                        <tbody id="history-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="medical">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>Medical Conditions</h6></div>
+                    <div class="card-body" id="p-medical-conditions"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"><h6>Medications</h6></div>
+                    <div class="card-body" id="p-medications"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="billing-tab">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr><th>Invoice</th><th>Date</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="billing-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="documents-tab">
+        <div class="row g-3">
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header"><h6 class="mb-0"><i class="bi bi-upload me-1"></i>Upload Document</h6></div>
+                    <div class="card-body">
+                        <form id="doc-upload-form">
+                            <div class="mb-3">
+                                <label class="form-label">File (PDF, JPEG, PNG, GIF, WEBP)</label>
+                                <input type="file" class="form-control" id="doc-file" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Notes (optional)</label>
+                                <textarea class="form-control" id="doc-notes" rows="2" placeholder="e.g. Old physical file scan, page 1-5"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="doc-upload-btn">
+                                <i class="bi bi-upload me-1"></i>Upload
+                            </button>
+                        </form>
+                        <div id="doc-upload-result" class="mt-2" style="display:none"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card">
+                    <div class="card-header"><h6 class="mb-0"><i class="bi bi-file-earmark me-1"></i>Scanned Documents</h6></div>
+                    <div class="card-body" id="documents-list">
+                        <p class="text-muted mb-0">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const patientId = window.ROUTE_ID;
+const INSURANCE_PROVIDERS = {};
+const PROVIDERS_READY = fetchWithAuth('/insurance/api/providers').then(r => r.ok ? r.json() : []).then(list => { (list || []).forEach(p => { INSURANCE_PROVIDERS[p.id] = p.name; }); }).catch(() => {});
+
+Promise.all([fetchWithAuth(`/patients/api/${patientId}`), PROVIDERS_READY]).then(([r]) => r.json()).then(data => {
+    document.getElementById('patient-name').textContent = `${data.first_name} ${data.last_name}`;
+    document.getElementById('patient-id-display').textContent = data.patient_id;
+    document.getElementById('patient-dob-age').textContent = data.dob ? `${data.dob} (${new Date().getFullYear() - new Date(data.dob).getFullYear()} yrs)` : '';
+    document.getElementById('edit-patient-btn').href = `/patients/${patientId}/edit`;
+
+    document.getElementById('p-phone').textContent = data.phone || '-';
+    document.getElementById('p-email').textContent = data.email || '-';
+    document.getElementById('p-address').textContent = data.address || '-';
+    document.getElementById('p-emergency-name').textContent = data.emergency_contact_name || '-';
+    document.getElementById('p-emergency-phone').textContent = data.emergency_contact_phone || '-';
+    document.getElementById('p-blood').textContent = data.blood_group || '-';
+    document.getElementById('p-scheme-id').textContent = (data.scheme_id && INSURANCE_PROVIDERS[data.scheme_id]) ? INSURANCE_PROVIDERS[data.scheme_id] : 'None';
+    document.getElementById('p-scheme-number').textContent = data.scheme_number || '-';
+    document.getElementById('p-scheme-type').textContent = data.scheme_type || '-';
+
+    // Check authorization requirements
+    if (data.scheme_id && INSURANCE_PROVIDERS[data.scheme_id] && INSURANCE_PROVIDERS[data.scheme_id].toLowerCase().includes('medhealth')) {
+        fetchWithAuth('/insurance/api/authorization-rules?provider_id=' + data.scheme_id).then(r => r.json()).then(rules => {
+            if (rules.length) {
+                const itemsList = rules.map(r => '<strong>' + r.item_name + '</strong>').join(', ');
+                const banner = document.createElement('div');
+                banner.className = 'alert alert-warning d-flex align-items-center mt-3';
+                banner.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i><div><strong>Prior Authorization Required</strong> — This patient needs pre-authorization for: ' + itemsList + ' under ' + INSURANCE_PROVIDERS[data.scheme_id] + '.</div>';
+                document.getElementById('info-tab-card').prepend(banner);
+            }
+        });
+    }
+
+    const allergiesDiv = document.getElementById('p-allergies');
+    if (data.allergies && data.allergies.length) {
+        data.allergies.forEach(a => {
+            const span = document.createElement('span');
+            span.className = 'badge bg-warning me-1';
+            span.textContent = a.allergy;
+            allergiesDiv.appendChild(span);
+        });
+    } else {
+        allergiesDiv.innerHTML = '<span class="text-muted">None recorded</span>';
+    }
+
+    const conditionsDiv = document.getElementById('p-medical-conditions');
+    if (data.medical_history && data.medical_history.length) {
+        data.medical_history.forEach(c => {
+            conditionsDiv.innerHTML += `<div class="mb-2"><strong>${c.condition_name}</strong><br><small class="text-muted">${c.diagnosis_date || ''} ${c.notes ? '- ' + c.notes : ''}</small></div>`;
+        });
+    } else {
+        conditionsDiv.innerHTML = '<span class="text-muted">None recorded</span>';
+    }
+
+    const medsDiv = document.getElementById('p-medications');
+    if (data.medications && data.medications.length) {
+        data.medications.forEach(m => {
+            medsDiv.innerHTML += `<div class="mb-2"><strong>${m.medication_name}</strong> ${m.dosage ? '- ' + m.dosage : ''}<br><small class="text-muted">${m.frequency || ''} ${m.start_date ? 'from ' + m.start_date : ''}</small></div>`;
+        });
+    } else {
+        medsDiv.innerHTML = '<span class="text-muted">None recorded</span>';
+    }
+});
+
+fetchWithAuth(`/patients/api/${patientId}/history`).then(r => r.json()).then(data => {
+    const historyBody = document.getElementById('history-table-body');
+    const items = [];
+    (data.consultations || []).forEach(c => items.push({date: c.created_at, type: 'Consultation: ' + c.consultation_type, doctor: (c.doctor_first || '') + ' ' + (c.doctor_last || ''), details: c.diagnosis || ''}));
+    (data.lab_tests || []).forEach(l => items.push({date: l.created_at, type: 'Lab: ' + l.test_name, doctor: '', details: l.status}));
+    (data.procedures || []).forEach(p => items.push({date: p.created_at, type: 'Procedure: ' + p.procedure_type, doctor: '', details: p.notes || ''}));
+
+    if (items.length) {
+        items.sort((a,b) => new Date(b.date) - new Date(a.date));
+        items.forEach(i => {
+            historyBody.innerHTML += `<tr><td>${new Date(i.date).toLocaleDateString()}</td><td>${i.type}</td><td>${i.doctor}</td><td>${i.details}</td></tr>`;
+        });
+    } else {
+        historyBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No visit history</td></tr>';
+    }
+
+    const billingBody = document.getElementById('billing-table-body');
+    if (data.billing && data.billing.length) {
+        data.billing.forEach(b => {
+            billingBody.innerHTML += `<tr>
+                <td>${b.invoice_number}</td>
+                <td>${new Date(b.created_at).toLocaleDateString()}</td>
+                <td>MK ${(b.total_amount || 0).toLocaleString()}</td>
+                <td>MK ${(b.amount_paid || 0).toLocaleString()}</td>
+                <td>MK ${(b.balance || 0).toLocaleString()}</td>
+                <td><span class="badge bg-${b.payment_status === 'paid' ? 'success' : b.payment_status === 'partial' ? 'warning' : 'danger'}">${b.payment_status}</span></td>
+            </tr>`;
+        });
+    } else {
+        billingBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No billing records</td></tr>';
+    }
+});
+
+// ===== Documents =====
+function loadDocuments() {
+    fetchWithAuth(`/patients/api/${patientId}/documents`).then(r => r.json()).then(docs => {
+        const div = document.getElementById('documents-list');
+        if (!docs.length) {
+            div.innerHTML = '<p class="text-muted mb-0">No documents uploaded yet.</p>';
+            return;
+        }
+        div.innerHTML = docs.map(d => `
+            <div class="d-flex justify-content-between align-items-start border-bottom pb-2 mb-2">
+                <div>
+                    <a href="${window.KAYANGE_API_BASE || ''}/patients/api/documents/${d.id}/download" class="fw-semibold text-decoration-none" target="_blank">
+                        <i class="bi bi-file-earmark-${d.mime_type && d.mime_type.includes('pdf') ? 'pdf' : 'image'} me-1"></i>${d.original_filename}
+                    </a>
+                    ${d.notes ? '<br><small class="text-muted">' + d.notes + '</small>' : ''}
+                    <br><small class="text-muted">${(d.file_size / 1024).toFixed(1)} KB · ${new Date(d.created_at).toLocaleDateString()}${d.uploaded_by_name ? ' by ' + d.uploaded_by_name : ''}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteDocument(${d.id})" title="Delete"><i class="bi bi-trash"></i></button>
+            </div>
+        `).join('');
+    }).catch(() => {
+        document.getElementById('documents-list').innerHTML = '<p class="text-danger mb-0">Failed to load documents.</p>';
+    });
+}
+
+window.deleteDocument = function(id) {
+    if (!confirm('Delete this document?')) return;
+    fetchWithAuth(`/patients/api/documents/${id}`, { method: 'DELETE' }).then(r => {
+        if (r.ok) loadDocuments();
+        else r.json().then(e => alert(e.error || 'Delete failed'));
+    });
+};
+
+document.getElementById('doc-upload-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('doc-file');
+    if (!fileInput.files.length) { alert('Select a file'); return; }
+
+    const btn = document.getElementById('doc-upload-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Uploading...';
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('notes', document.getElementById('doc-notes').value);
+
+    try {
+        const res = await fetchWithAuth(`/patients/api/${patientId}/documents`, { method: 'POST', body: formData });
+        const result = await res.json();
+        const div = document.getElementById('doc-upload-result');
+        div.style.display = 'block';
+        if (res.ok) {
+            div.className = 'alert alert-success py-2';
+            div.innerHTML = '<i class="bi bi-check-circle me-1"></i>' + (result.message || 'Uploaded');
+            document.getElementById('doc-file').value = '';
+            document.getElementById('doc-notes').value = '';
+            loadDocuments();
+        } else {
+            div.className = 'alert alert-danger py-2';
+            div.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>' + (result.error || 'Upload failed');
+        }
+    } catch (err) {
+        document.getElementById('doc-upload-result').style.display = 'block';
+        document.getElementById('doc-upload-result').className = 'alert alert-danger py-2';
+        document.getElementById('doc-upload-result').innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>Network error';
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-upload me-1"></i>Upload';
+});
+
+loadDocuments();
+</script>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!token) { window.location.href = '/auth/login'; return; }
+
+            const initials = (user.first_name || 'U').charAt(0) + (user.last_name || '').charAt(0);
+            document.getElementById('sidebar-user-name').textContent = user.first_name + ' ' + user.last_name;
+            document.getElementById('sidebar-user-role').textContent = user.role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('user-avatar').textContent = initials;
+            document.getElementById('topbar-avatar').textContent = initials;
+            document.getElementById('topbar-user-name').textContent = user.first_name || 'User';
+
+            document.querySelectorAll('#sidebar-nav .nav-item').forEach(item => {
+                const roles = item.dataset.roles;
+                if (roles !== 'all' && !roles.split(',').includes(user.role)) {
+                    item.style.display = 'none';
+                }
+            });
+
+            const path = window.location.pathname;
+            document.querySelectorAll('#sidebar-nav .nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#' && path.startsWith(href) && href !== '/dashboard') {
+                    link.classList.add('active');
+                } else if (href === '/dashboard' && path === '/dashboard') {
+                    link.classList.add('active');
+                }
+            });
+
+            const titles = {
+                '/dashboard': 'Dashboard',
+                '/patients': 'Patients',
+                '/appointments': 'Appointments',
+                '/consultations': 'Consultations',
+                '/billing': 'Billing',
+                '/pharmacy': 'Pharmacy',
+                '/doctors': 'Doctors',
+                '/departments': 'Departments',
+                '/staff': 'Staff',
+                '/users': 'Users',
+                '/suppliers': 'Suppliers',
+                '/reports': 'Reports',
+                '/messages': 'Messages',
+            '/flow': 'Patient Flow',
+                '/lab': 'Lab',
+                '/prescriptions': 'Prescriptions',
+                '/settings/profile': 'My Profile',
+                '/settings/system': 'System Settings',
+                '/insurance/claims': 'Insurance Claims',
+                '/insurance/eligibility': 'Eligibility Verification',
+                '/insurance/providers': 'Insurance Providers',
+                '/backup': 'Backup',
+                '/yellow-book': 'Yellow Book',
+                '/reminders': 'Reminders'
+            };
+            for (const [key, val] of Object.entries(titles)) {
+                if (path.startsWith(key)) { document.getElementById('page-title').textContent = val; break; }
+            }
+        });
+
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) { var d = new Date(); d.setTime(d.getTime() + days*24*60*60*1000); expires = '; expires=' + d.toUTCString(); }
+            document.cookie = name + '=' + (value || '') + expires + '; path=/';
+        }
+        function getCookie(name) {
+            var nameEQ = name + '=';
+            var ca = document.cookie.split(';');
+            for (var i=0; i < ca.length; i++) { var c = ca[i].trim(); if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length); }
+            return null;
+        }
+        function eraseCookie(name) { document.cookie = name + '=; Max-Age=-99999999; path=/'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
+        function logout() {
+            eraseCookie('access_token');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/auth/login';
+        }
+
+        // Sync token from localStorage to cookie for page navigation auth
+        (function() {
+            var token = localStorage.getItem('token');
+            if (token && !getCookie('access_token')) {
+                setCookie('access_token', token, 1);
+            }
+        })();
+
+        document.getElementById('global-search')?.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                window.location.href = '/patients?search=' + encodeURIComponent(this.value.trim());
+            }
+        });
+
+        // Notification system
+        async function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api?limit=15', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const notifs = await res.json();
+                const list = document.getElementById('notif-list');
+                const empty = document.getElementById('notif-empty');
+                list.innerHTML = '';
+                if (!notifs.length) {
+                    list.style.display = 'none';
+                    empty.style.display = 'block';
+                    return;
+                }
+                list.style.display = 'block';
+                empty.style.display = 'none';
+                const typeIcons = {
+                    info: 'bi-info-circle text-primary',
+                    success: 'bi-check-circle text-success',
+                    warning: 'bi-exclamation-triangle text-warning',
+                    danger: 'bi-exclamation-circle text-danger',
+                    message: 'bi-envelope text-info',
+                    lab: 'bi-flask text-primary',
+                    appointment: 'bi-calendar-check text-success',
+                    prescription: 'bi-prescription2 text-primary',
+                    insurance: 'bi-shield-check text-success'
+                };
+                notifs.forEach(n => {
+                    const icon = typeIcons[n.type] || typeIcons.info;
+                    const time = notifTime(n.created_at);
+                    list.innerHTML += '<div class="notif-item ' + (n.is_read ? '' : 'unread') + '" onclick="handleNotifClick(this, ' + n.id + ', \'' + (n.reference_url || '') + '\')">' +
+                        '<div class="d-flex gap-2">' +
+                        '<div class="notif-icon"><i class="bi ' + icon + '"></i></div>' +
+                        '<div class="flex-grow-1">' +
+                        '<div class="notif-title">' + notifEsc(n.title) + '</div>' +
+                        '<div class="notif-msg">' + notifEsc(n.message || '') + '</div>' +
+                        '<div class="notif-time">' + time + '</div>' +
+                        '</div>' +
+                        '<button class="notif-dismiss" onclick="event.stopPropagation(); dismissNotif(' + n.id + ', this)" title="Dismiss"><i class="bi bi-x"></i></button>' +
+                        '</div>' +
+                        '</div>';
+                });
+            } catch(e) {}
+        }
+
+        async function checkUnread() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const res = await fetch('/notifications/api/unread-count', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                const data = await res.json();
+                const badge = document.getElementById('notif-badge');
+                if (data.count > 0) {
+                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+
+        async function handleNotifClick(el, id, url) {
+            if (!el.classList.contains('unread')) {
+                if (url) window.location.href = url;
+                return;
+            }
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id + '/read', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            el.classList.remove('unread');
+            checkUnread();
+            if (url) window.location.href = url;
+        }
+
+        async function dismissNotif(id, btn) {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/' + id, {
+                method: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            btn.closest('.notif-item').remove();
+            checkUnread();
+            const list = document.getElementById('notif-list');
+            if (!list.children.length) { list.style.display = 'none'; document.getElementById('notif-empty').style.display = 'block'; }
+        }
+
+        async function markAllRead() {
+            const token = localStorage.getItem('token');
+            await fetch('/notifications/api/read-all', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+            checkUnread();
+        }
+
+        function notifTime(ts) {
+            if (!ts) return '';
+            const diff = Date.now() - new Date(ts).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return mins + 'm ago';
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return hrs + 'h ago';
+            const days = Math.floor(hrs / 24);
+            return days + 'd ago';
+        }
+
+        function notifEsc(s) {
+            if (!s) return '';
+            const d = document.createElement('div');
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        // Poll for unread notifications every 60 seconds
+        checkUnread();
+        setInterval(checkUnread, 60000);
+    </script>
+</body>
+</html>
